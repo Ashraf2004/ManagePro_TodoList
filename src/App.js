@@ -81,12 +81,7 @@ function App() {
     color: darkTheme ? "#ccc" : "#333",
     borderBottom: "1px solid " + (darkTheme ? "#444" : "#ddd"),
   };
-  const logout = {
-    padding: "1rem",
-    cursor: "pointer",
-    color: rgb(217, 83, 79),
-    borderBottom: "1px solid " + (darkTheme ? "#444" : "#ddd"),
-  };
+ 
 
   const frameContainerStyle = {
     display: "flex",
@@ -138,7 +133,7 @@ function App() {
         <div style={dashboardStyle}>
           <div style={dashboardItemStyle}><a href="https://ashraf2004.github.io/ManagePro_chart/">Ghant chart</a></div>
           <div style={dashboardItemStyle}><a href="https://ashraf2004.github.io/ManagePro_Members/">Members</a></div>
-          <div style={logout}><a href="https://manage-pro-black.vercel.app/#home" >Logout</a></div>
+          <div style={dashboardItemStyle}><a href="https://manage-pro-black.vercel.app/#home" >Logout</a></div>
         </div>
         <div style={profileFrameStyle}>
           {/* Profile content */}
