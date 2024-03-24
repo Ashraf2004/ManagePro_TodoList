@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import AddTaskForm from "./components/AddTaskForm";
 import TaskList from "./components/TaskList";
 import UserProfile from "./components/UserProfile";
+import Modal from "./components/Modal";
 import { MdDarkMode, MdSunny } from "react-icons/md";
 
 function App() {
@@ -15,6 +16,8 @@ function App() {
   const [showAssignedTasks, setShowAssignedTasks] = useState(false);
   const [selectedMemberId, setSelectedMemberId] = useState(null);
   const [enteredPassword, setEnteredPassword] = useState("");
+  const [showModal, setShowModal] = useState(false);
+  const [assignedTasks, setAssignedTasks] = useState([]);
 
   const addTask = (title, assignedMemberId) => {
     const newTask = {
@@ -58,24 +61,25 @@ function App() {
     setEnteredPassword("");
   };
 
-  const getAssignedTasks = () => {
-    if (selectedMemberId === null) {
-      return tasks;
-    }
+  const handlePasswordCheck = () => {
     const selectedMember = members.find(
       (member) => member.id === selectedMemberId
     );
     if (selectedMember && selectedMember.password === enteredPassword) {
-      return tasks.filter(
+      const assignedTasksForMember = tasks.filter(
         (task) =>
           task.assignedMember && task.assignedMember.id === selectedMemberId
       );
+      setAssignedTasks(assignedTasksForMember);
+      setShowModal(true);
+    } else {
+      alert("Incorrect password");
     }
-    return [];
   };
 
-  const handlePasswordChange = (e) => {
-    setEnteredPassword(e.target.value);
+  const closeModal = () => {
+    setShowModal(false);
+    setAssignedTasks([]);
   };
 
   return (
@@ -247,7 +251,7 @@ function App() {
                   type="password"
                   placeholder="Enter password"
                   value={enteredPassword}
-                  onChange={handlePasswordChange}
+                  onChange={(e) => setEnteredPassword(e.target.value)}
                   style={{
                     padding: "0.5rem",
                     border: "none",
@@ -257,6 +261,19 @@ function App() {
                     marginRight: "0.5rem",
                   }}
                 />
+                <button
+                  onClick={handlePasswordCheck}
+                  style={{
+                    padding: "0.5rem 1rem",
+                    border: "none",
+                    borderRadius: "4px",
+                    backgroundColor: "#4caf50",
+                    color: "#fff",
+                    cursor: "pointer",
+                  }}
+                >
+                  Check
+                </button>
               </div>
             )}
 
@@ -311,30 +328,80 @@ function App() {
                   Clear all tasks
                 </button>
               </div>
-              {getAssignedTasks().length ? (
-                <TaskList
-                  tasks={getAssignedTasks()}
-                  onEditTask={editTask}
-                  onDeleteTask={deleteTask}
-                  onToggleCompleted={toggleCompleted}
-                />
-              ) : (
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    overflow: "hidden",
-                    color: darkTheme ? "#ccc" : "#888",
-                  }}
-                >
-                  <p style={{ textAlign: "center" }}>Empty task</p>
-                </div>
+              {!showAssignedTasks && (
+                <>
+                  {tasks.length ? (
+                    <TaskList
+                      tasks={tasks}
+                      onEditTask={editTask}
+                      onDeleteTask={deleteTask}
+                      onToggleCompleted={toggleCompleted}
+                    />
+                  ) : (
+                    <div
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        overflow: "hidden",
+                        color: darkTheme ? "#ccc" : "#888",
+                      }}
+                    >
+                      <p style={{ textAlign: "center" }}>Empty task</p>
+                    </div>
+                  )}
+                </>
               )}
             </div>
           </div>
         </div>
       </div>
+
+      {showModal && (
+        <Modal onClose={closeModal}>
+          <div
+            style={{
+              backgroundColor: darkTheme ? "#222" : "#fff",
+              padding: "2rem",
+              borderRadius: "8px",
+              boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+              maxWidth: "600px",
+              width: "100%",
+            }}
+          >
+            <h2
+              style={{
+                marginBottom: "1rem",
+                color: darkTheme ? "#ccc" : "#333",
+              }}
+            >
+              {`${
+                members.find((member) => member.id === selectedMemberId)?.name
+              }'s Tasks`}
+            </h2>
+            {assignedTasks.length ? (
+              <TaskList
+                tasks={assignedTasks}
+                onEditTask={editTask}
+                onDeleteTask={deleteTask}
+                onToggleCompleted={toggleCompleted}
+              />
+            ) : (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  overflow: "hidden",
+                  color: darkTheme ? "#ccc" : "#888",
+                }}
+              >
+                <p style={{ textAlign: "center" }}>Empty task</p>
+              </div>
+            )}
+          </div>
+        </Modal>
+      )}
     </div>
   );
 }
