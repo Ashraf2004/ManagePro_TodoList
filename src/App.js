@@ -38,6 +38,9 @@ function App() {
       assignedMember: assignedMember,
     };
     setTasks([...tasks, newTask]);
+    if (showAssignedTasks) {
+      setShowAssignedTasks(false); // Reset to show "My Tasks" section after adding a new task
+    }
   };
 
 
