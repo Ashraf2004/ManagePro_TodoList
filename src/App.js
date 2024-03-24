@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import AddTaskForm from "./components/AddTaskForm";
 import TaskList from "./components/TaskList";
 import UserProfile from "./components/UserProfile";
-import Modal from "./components/Modal";
 import { MdDarkMode, MdSunny } from "react-icons/md";
+import ReactDOM from "react-dom";
 
 function App() {
   const [tasks, setTasks] = useState([]);
@@ -80,6 +80,55 @@ function App() {
   const closeModal = () => {
     setShowModal(false);
     setAssignedTasks([]);
+  };
+
+  const Modal = ({ onClose, children }) => {
+    return ReactDOM.createPortal(
+      <div
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "rgba(0, 0, 0, 0.5)",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          zIndex: 9999,
+        }}
+      >
+        <div
+          style={{
+            position: "relative",
+            backgroundColor: darkTheme ? "#222" : "#fff",
+            padding: "2rem",
+            borderRadius: "8px",
+            boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
+            maxWidth: "600px",
+            width: "100%",
+          }}
+        >
+          <button
+            style={{
+              position: "absolute",
+              top: "1rem",
+              right: "1rem",
+              backgroundColor: "transparent",
+              border: "none",
+              fontSize: "1.2rem",
+              cursor: "pointer",
+              color: darkTheme ? "#ccc" : "#333",
+            }}
+            onClick={onClose}
+          >
+            &times;
+          </button>
+          {children}
+        </div>
+      </div>,
+      document.body
+    );
   };
 
   return (
@@ -166,7 +215,7 @@ function App() {
                 "1px solid " + (darkTheme ? "#444" : "#ddd"),
             }}
           >
-            <a href="https://ashraf2004.github.io/ManagePro_Members/">Members</a>
+            <a href="https://ashraf2004.github.io/ManagePro_Members/">Team Members</a>
           </div>
           {members.map((member) => (
             <div
