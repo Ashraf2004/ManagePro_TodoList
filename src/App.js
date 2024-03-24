@@ -20,14 +20,20 @@ function App() {
   const [assignedTasks, setAssignedTasks] = useState([]);
 
   const addTask = (title, assignedMemberId) => {
+  const assignedMember = members.find((member) => member.id === assignedMemberId);
+  if (assignedMember) {
     const newTask = {
       id: Date.now(),
       title,
       completed: false,
-      assignedMember: members.find((member) => member.id === assignedMemberId),
+      assignedMember: assignedMember,
     };
     setTasks([...tasks, newTask]);
-  };
+  } else {
+    console.error("Member not found for assignedMemberId: ", assignedMemberId);
+  }
+};
+
 
   const editTask = (id, title) => {
     setTasks(tasks.map((task) => (task.id === id ? { ...task, title } : task)));
