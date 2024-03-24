@@ -20,8 +20,17 @@ function App() {
   const [assignedTasks, setAssignedTasks] = useState([]);
 
   const addTask = (title, assignedMemberId) => {
-  const assignedMember = members.find((member) => member.id === assignedMemberId);
-  if (assignedMember) {
+    const assignedMember = members.find((member) => member.id === assignedMemberId);
+    if (!assignedMember) {
+      // Prompt the user to enter a valid member ID
+      const memberId = prompt("Member not found! Please enter the member ID:");
+      if (!memberId) {
+        // User cancelled or didn't provide a member ID
+        return;
+      }
+      addTask(title, parseInt(memberId)); // Recursive call with the provided member ID
+      return;
+    }
     const newTask = {
       id: Date.now(),
       title,
@@ -29,10 +38,7 @@ function App() {
       assignedMember: assignedMember,
     };
     setTasks([...tasks, newTask]);
-  } else {
-    console.error("Member not found for assignedMemberId: ", assignedMemberId);
-  }
-};
+  };
 
 
   const editTask = (id, title) => {
