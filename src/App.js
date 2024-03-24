@@ -229,10 +229,27 @@ function App() {
           >
             <a href="https://ashraf2004.github.io/ManagePro_Members/">Team Members</a>
           </div>
-          <div>
+          
+<div>
   <div style={{ padding: "1rem", color: darkTheme ? "#ccc" : "#333" }}>
     <h3>My Tasks</h3>
     <AddTaskForm darkTheme={darkTheme} onAddTask={addTask} members={members} />
+  </div>
+  <div style={{ padding: "1rem", color: darkTheme ? "#ccc" : "#333" }}>
+    <h3>Incomplete Tasks</h3>
+    {tasks.filter(task => !task.completed).length > 0 ? (
+      <ul>
+        {tasks
+          .filter(task => !task.completed)
+          .map(task => task.assignedMember.name)
+          .filter((name, index, self) => self.indexOf(name) === index) // Ensure unique names
+          .map((name, index) => (
+            <li key={index}>{name}</li>
+          ))}
+      </ul>
+    ) : (
+      <p>No incomplete tasks</p>
+    )}
   </div>
   <div style={{ padding: "1rem", color: darkTheme ? "#ccc" : "#333" }}>
     <h3>View Team Member Tasks</h3>
