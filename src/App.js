@@ -8,12 +8,13 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [darkTheme, setDarkTheme] = useState(false);
   const [members, setMembers] = useState([
-    { id: 1, name: "John Doe" },
-    { id: 2, name: "Jane Smith" },
-    { id: 3, name: "Bob Johnson" },
+    { id: 1, name: "John Doe", password: "password1" },
+    { id: 2, name: "Jane Smith", password: "password2" },
+    { id: 3, name: "Bob Johnson", password: "password3" },
   ]);
   const [showAssignedTasks, setShowAssignedTasks] = useState(false);
   const [selectedMemberId, setSelectedMemberId] = useState(null);
+  const [enteredPassword, setEnteredPassword] = useState("");
 
   const addTask = (title, assignedMemberId) => {
     const newTask = {
@@ -54,15 +55,27 @@ function App() {
   const handleAssignedTasksClick = (memberId) => {
     setSelectedMemberId(memberId);
     setShowAssignedTasks(true);
+    setEnteredPassword("");
   };
 
   const getAssignedTasks = () => {
     if (selectedMemberId === null) {
       return tasks;
     }
-    return tasks.filter(
-      (task) => task.assignedMember && task.assignedMember.id === selectedMemberId
+    const selectedMember = members.find(
+      (member) => member.id === selectedMemberId
     );
+    if (selectedMember && selectedMember.password === enteredPassword) {
+      return tasks.filter(
+        (task) =>
+          task.assignedMember && task.assignedMember.id === selectedMemberId
+      );
+    }
+    return [];
+  };
+
+  const handlePasswordChange = (e) => {
+    setEnteredPassword(e.target.value);
   };
 
   return (
@@ -221,6 +234,31 @@ function App() {
                   : "My Tasks"}
               </h1>
             </div>
+
+            {showAssignedTasks && (
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginBottom: "1rem",
+                }}
+              >
+                <input
+                  type="password"
+                  placeholder="Enter password"
+                  value={enteredPassword}
+                  onChange={handlePasswordChange}
+                  style={{
+                    padding: "0.5rem",
+                    border: "none",
+                    borderRadius: "4px",
+                    backgroundColor: darkTheme ? "#333" : "#f0f0f0",
+                    color: darkTheme ? "#ccc" : "#333",
+                    marginRight: "0.5rem",
+                  }}
+                />
+              </div>
+            )}
 
             <div
               style={{
