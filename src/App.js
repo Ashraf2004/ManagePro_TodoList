@@ -12,6 +12,8 @@ function App() {
     { id: 2, name: "Jane Smith" },
     { id: 3, name: "Bob Johnson" },
   ]);
+  const [showAssignedTasks, setShowAssignedTasks] = useState(false);
+  const [selectedMemberId, setSelectedMemberId] = useState(null);
 
   const addTask = (title, assignedMemberId) => {
     const newTask = {
@@ -47,6 +49,20 @@ function App() {
 
   const toggleTheme = () => {
     setDarkTheme((prevTheme) => !prevTheme);
+  };
+
+  const handleAssignedTasksClick = (memberId) => {
+    setSelectedMemberId(memberId);
+    setShowAssignedTasks(true);
+  };
+
+  const getAssignedTasks = () => {
+    if (selectedMemberId === null) {
+      return tasks;
+    }
+    return tasks.filter(
+      (task) => task.assignedMember && task.assignedMember.id === selectedMemberId
+    );
   };
 
   return (
@@ -135,19 +151,21 @@ function App() {
           >
             <a href="https://ashraf2004.github.io/ManagePro_Members/">Members</a>
           </div>
-          <div
-            style={{
-              padding: "1rem",
-              cursor: "pointer",
-              color: darkTheme ? "#ccc" : "#333",
-              borderBottom:
-                "1px solid " + (darkTheme ? "#444" : "#ddd"),
-            }}
-          >
-            <a href="#" onClick={() => alert("Assigned Tasks")}>
-              Assigned Tasks
-            </a>
-          </div>
+          {members.map((member) => (
+            <div
+              key={member.id}
+              style={{
+                padding: "1rem",
+                cursor: "pointer",
+                color: darkTheme ? "#ccc" : "#333",
+                borderBottom:
+                  "1px solid " + (darkTheme ? "#444" : "#ddd"),
+              }}
+              onClick={() => handleAssignedTasksClick(member.id)}
+            >
+              {member.name}'s Tasks
+            </div>
+          ))}
           <div
             style={{
               padding: "1rem",
@@ -194,7 +212,13 @@ function App() {
                   color: darkTheme ? "#ccc" : "#333",
                 }}
               >
-                My Tasks
+                {showAssignedTasks
+                  ? `${
+                      members.find(
+                        (member) => member.id === selectedMemberId
+                      )?.name
+                    }'s Tasks`
+                  : "My Tasks"}
               </h1>
             </div>
 
@@ -249,9 +273,9 @@ function App() {
                   Clear all tasks
                 </button>
               </div>
-              {tasks.length ? (
+              {getAssignedTasks().length ? (
                 <TaskList
-                  tasks={tasks}
+                  tasks={getAssignedTasks()}
                   onEditTask={editTask}
                   onDeleteTask={deleteTask}
                   onToggleCompleted={toggleCompleted}
