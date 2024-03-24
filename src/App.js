@@ -38,9 +38,6 @@ function App() {
       assignedMember: assignedMember,
     };
     setTasks([...tasks, newTask]);
-    if (showAssignedTasks) {
-      setShowAssignedTasks(false); // Reset to show "My Tasks" section after adding a new task
-    }
   };
 
 
@@ -232,21 +229,27 @@ function App() {
           >
             <a href="https://ashraf2004.github.io/ManagePro_Members/">Team Members</a>
           </div>
-          {members.map((member) => (
-            <div
-              key={member.id}
-              style={{
-                padding: "1rem",
-                cursor: "pointer",
-                color: darkTheme ? "#ccc" : "#333",
-                borderBottom:
-                  "1px solid " + (darkTheme ? "#444" : "#ddd"),
-              }}
-              onClick={() => handleAssignedTasksClick(member.id)}
-            >
-              {member.name}'s Tasks
-            </div>
-          ))}
+          <div>
+  <div style={{ padding: "1rem", color: darkTheme ? "#ccc" : "#333" }}>
+    <h3>My Tasks</h3>
+    <AddTaskForm darkTheme={darkTheme} onAddTask={addTask} members={members} />
+  </div>
+  <div style={{ padding: "1rem", color: darkTheme ? "#ccc" : "#333" }}>
+    <h3>View Team Member Tasks</h3>
+    <select
+      value={selectedMemberId}
+      onChange={(e) => handleAssignedTasksClick(parseInt(e.target.value))}
+    >
+      <option value={null}>Select a team member</option>
+      {members.map((member) => (
+        <option key={member.id} value={member.id}>
+          {member.name}
+        </option>
+      ))}
+    </select>
+  </div>
+</div>
+
           <div
             style={{
               padding: "1rem",
