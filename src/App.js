@@ -9,9 +9,9 @@ function App() {
   const [tasks, setTasks] = useState([]);
   const [darkTheme, setDarkTheme] = useState(false);
   const [members, setMembers] = useState([
-    { id: 1, name: "John Doe", password: "password1" },
-    { id: 2, name: "Jane Smith", password: "password2" },
-    { id: 3, name: "Bob Johnson", password: "password3" },
+    { id: 1, name: "Ashraf", password: "password1" },
+    { id: 2, name: "Bhavani Shankar", password: "password2" },
+    { id: 3, name: "Praneeth", password: "password3" },
   ]);
   const [showAssignedTasks, setShowAssignedTasks] = useState(false);
   const [selectedMemberId, setSelectedMemberId] = useState(null);
