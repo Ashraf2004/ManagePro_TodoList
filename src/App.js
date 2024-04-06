@@ -198,7 +198,7 @@ function App() {
       <div style={{ display: "flex", width: "100%" }}>
         <div
           style={{
-            width: "15%",
+            width: "20%",
             backgroundColor: darkTheme ? "#222" : "#fff",
             boxShadow: "0 4px 6px rgba(0, 0, 0, 0.1)",
             borderRadius: "8px",
